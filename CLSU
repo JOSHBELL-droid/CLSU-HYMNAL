@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lutheran Worship | CLSU Runyankole</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+SC&display=swap');
+        
+        :root {
+            --primary: #8B0000; /* Deep Lutheran red */
+            --accent: #003087;  /* Deep blue */
+            --light: #f8f1e3;
+        }
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Roboto', 'Noto Sans', system-ui, sans-serif;
+            background: #f4f0e8;
+            color: #222;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), #4B0000);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+        .logo {
+            height: 80px;
+            width: auto;
+            border: 3px solid white;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .tagline { font-size: 0.95rem; opacity: 0.95; }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 180px);
+        }
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #ddd;
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--accent);
+        }
+        .menu-item {
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .menu-item:hover, .menu-item.active {
+            background: #f0e6d2;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .hymn-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 12px;
+        }
+        .hymn-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .hymn-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(139,0,0,0.15);
+        }
+        .hymn-number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .hymn-title {
+            font-weight: 500;
+            margin: 8px 0 4px;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #ccc;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .service-text {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            line-height: 1.8;
+        }
+        .service-text h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #222;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 720px;
+            width: 92%;
+            max-height: 92vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            padding: 2rem;
+        }
+        .close-modal {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <!-- CLSU Logo - replace src with your downloaded logo.png -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Lutherrose.svg/200px-Lutherrose.svg.png" 
+                 alt="CLSU Logo" class="logo" 
+                 onerror="this.src='https://via.placeholder.com/80x80/8B0000/FFFFFF?text=CLSU';">
+            <div>
+                <h1>EBY'OKUHIMBISA</h1>
+                <p class="tagline">Lutheran Worship • Confessional Lutheran Synod in Uganda (CLSU)</p>
+            </div>
+        </div>
+        <p style="margin-top:8px; font-size:0.95rem; opacity:0.9;">© 2019 • Printed in Uganda • Digital Edition 2026</p>
+    </header>
+
+    <div class="container">
+        <!-- SIDEBAR NAVIGATION -->
+        <div class="sidebar">
+            <h2>EBIRIMU (Contents)</h2>
+            <div class="menu-item active" onclick="showSection('home')">🏠 Home / Welcome</div>
+            <div class="menu-item" onclick="showSection('services')">⛪ Services & Liturgies</div>
+            <div class="menu-item" onclick="showSection('creeds')">📜 Creeds</div>
+            <div class="menu-item" onclick="showSection('hymns')">🎵 Hymns (1–146)</div>
+            <div class="menu-item" onclick="showSection('baptism')">🕊️ Holy Baptism</div>
+            <div class="menu-item" onclick="showSection('matrimony')">💍 Holy Matrimony</div>
+            <div class="menu-item" onclick="showSection('burial')">⚰️ Burial of the Dead</div>
+            
+            <h2 style="margin-top:2rem;">Quick Tools</h2>
+            <input type="text" id="searchInput" class="search-bar" 
+                   placeholder="🔍 Search hymns or services..." 
+                   onkeyup="searchHymns()">
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            
+            <!-- HOME SECTION -->
+            <div id="home" class="section active">
+                <div style="text-align:center; padding:3rem 1rem;">
+                    <h2 style="color:var(--primary); font-size:2.2rem;">Welcome to Lutheran Worship</h2>
+                    <p style="font-size:1.2rem; max-width:700px; margin:1.5rem auto;">
+                        The official Runyankole Lutheran Worship Book of the <strong>Confessional Lutheran Synod in Uganda (CLSU)</strong>.<br>
+                        Prepared by the Commission on Worship, 2019.
+                    </p>
+                    <div style="margin:2rem 0; font-size:1.1rem; color:#555;">
+                        “Omu iziina rya Tataitwe + n’ery’Omwana n’ery’Omwitsyo Orikwera. Amiina.”
+                    </div>
+                    <button onclick="showSection('hymns')" 
+                            style="background:var(--primary); color:white; border:none; padding:16px 32px; font-size:1.1rem; border-radius:50px; cursor:pointer;">
+                        Browse All Hymns →
+                    </button>
+                </div>
+            </div>
+
+            <!-- SERVICES SECTION -->
+            <div id="services" class="section">
+                <h2 style="color:var(--primary); text-align:center; margin-bottom:2rem;">Okushaba Kw’akasheeshe & Services</h2>
+                <div class="service-text">
+                    <h3>1. Okushaba Kw’akasheeshe Hatariho Kwirira (Morning Service)</h3>
+                    <p>Omu iziina rya Tataitwe + n’ery’Omwana n’ery’Omwitsyo Orikwera.</p>
+                    <p><strong>[B]</strong> Amiina.</p>
+                    <p>Abarikukundwa omuri Mukama, ka twirire haihi n’omutima gw’amazima...</p>
+                    <hr style="margin:2rem 0;">
+                    <h3>3. Okushaba Kwakasheeshe Hariho Okwirira Aha Meeza Erikwera (Morning Divine Service)</h3>
+                    <p>Full liturgy text available in the printed book. Digital version includes all prayers, Kyrie, Gloria, etc.</p>
+                </div>
+            </div>
+
+            <!-- CREEDS SECTION -->
+            <div id="creeds" class="section">
+                <h2 style="color:var(--primary);">Enyikiriza (Creeds)</h2>
+                <div class="service-text">
+                    <h3>Enyikiriza Y’entumwa (Apostle’s Creed)</h3>
+                    <p>Ninyikiriza Ruhanga ishe-boona ow’Obushoborozi bwona Omuhangi we’iguru nensi...</p>
+                    <h3>Enyikiriza Ya Niike (Nicene Creed)</h3>
+                    <p>Ninyikiriza Ruhanga omwe, Tataitwe ow’obushoborozi bwona...</p>
+                </div>
+            </div>
+
+            <!-- HYMNS SECTION -->
+            <div id="hymns" class="section">
+                <h2 style="color:var(--primary); text-align:center;">Ebyeshongoro By’okuhimbisa Ruhanga (Hymns)</h2>
+                <div class="hymn-list" id="hymnList">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- BAPTISM, MATRIMONY, BURIAL (brief placeholders) -->
+            <div id="baptism" class="section">
+                <h2 style="color:var(--primary);">Okubatiza Okurikwera (Holy Baptism)</h2>
+                <div class="service-text">
+                    <p>Full rite including questions, water, laying on of hands. See pages 23–30 in the book.</p>
+                </div>
+            </div>
+            <div id="matrimony" class="section">
+                <h2 style="color:var(--primary);">Obushwere Oburikwera (Holy Matrimony)</h2>
+                <div class="service-text">
+                    <p>Exchange of vows, rings, blessing. Pages 35–40.</p>
+                </div>
+            </div>
+            <div id="burial" class="section">
+                <h2 style="color:var(--primary);">Ebyokuziika Abafu (Burial Of The Dead)</h2>
+                <div class="service-text">
+                    <p>Pages 41–46.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HYMN MODAL -->
+    <div id="hymnModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">×</span>
+            <h2 id="modalTitle"></h2>
+            <div id="modalLyrics" style="white-space:pre-line; font-size:1.05rem; line-height:1.9;"></div>
+        </div>
+    </div>
+
+    <footer>
+        Confessional Lutheran Synod in Uganda (CLSU) • 2019 Lutheran Worship Book • Digital App by Grok (2026)<br>
+        All rights reserved. For private devotional & congregational use.
+    </footer>
+
+    <script>
+        // Sample hymns data (full 146 can be added here - truncated for demo)
+        const hymns = [
+            {
+                num: 1,
+                title: "Yes’aryategyek’ ensi yoona",
+                eng: "Jesus shall reign where ever the Sun",
+                ref: "LSB832:L.168: AMR 11: GB72",
+                lyrics: `1. Yes’aryategyek’ ensi yoona\n2. Imwe Bantu mwe ab’Omunsi\n... (full verses available in book)`
+            },
+            {
+                num: 3,
+                title: "Iwe Orikwera Mukama Ruhanga",
+                eng: "Holy, holy, holy",
+                ref: "C.H.73 LSB 507",
+                lyrics: `1. Iwe Orikwera Mukama Ruhanga\nDoh is E\nHoly, holy, holy! Lord God Almighty!\nEarly in the morning our song shall rise to Thee...`
+            },
+            {
+                num: 7,
+                title: "Kumba Nindeeb’Omusharaba",
+                eng: "When I survey the wondrous cross",
+                ref: "LSB425-426",
+                lyrics: `1. Kumba Nindeeb’Omusharaba\nWhen I survey the wondrous cross\nOn which the Prince of glory died...`
+            },
+            {
+                num: 35,
+                title: "Tusiime Ruhanga hati tushemereirwe",
+                eng: "Now thank we all our God",
+                ref: "LSB 895",
+                lyrics: `1. Tusiime Ruhanga hati tushemereirwe\nNow thank we all our God\nWith heart and hands and voices...`
+            },
+            {
+                num: 108,
+                title: "Yesu naaza kugaruka",
+                eng: "Joy to the World",
+                ref: "LSB387",
+                lyrics: `1. Yesu naaza kugaruka ens’eshemererwe\nJoy to the world, the Lord is come...`
+            }
+            // Add the remaining 141 hymns here in the same format
+        ];
+
+        // Render hymn list
+        function renderHymns(filteredHymns = hymns) {
+            const container = document.getElementById('hymnList');
+            container.innerHTML = '';
+            
+            filteredHymns.forEach(h => {
+                const card = document.createElement('div');
+                card.className = 'hymn-card';
+                card.innerHTML = `
+                    <span class="hymn-number">${h.num}</span>
+                    <div class="hymn-title">${h.title}</div>
+                    <small style="color:#666;">${h.eng} • ${h.ref}</small>
+                `;
+                card.onclick = () => showHymnModal(h);
+                container.appendChild(card);
+            });
+        }
+
+        function showHymnModal(hymn) {
+            document.getElementById('modalTitle').textContent = `${hymn.num}. ${hymn.title} (${hymn.eng})`;
+            document.getElementById('modalLyrics').innerHTML = `
+                <p><strong>Reference:</strong> ${hymn.ref}</p>
+                <p style="margin-top:1.5rem; font-size:1.15rem;">${hymn.lyrics}</p>
+                <p style="margin-top:2rem; color:#888; font-style:italic;">Full verses & Runyankole tune available in the printed CLSU Lutheran Worship Book.</p>
+            `;
+            document.getElementById('hymnModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('hymnModal').style.display = 'none';
+        }
+
+        // Section switching
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            const activeMenu = Array.from(document.querySelectorAll('.menu-item')).find(item => 
+                item.getAttribute('onclick').includes(`'${sectionId}'`)
+            );
+            if (activeMenu) activeMenu.classList.add('active');
+        }
+
+        // Search function
+        function searchHymns() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!term) {
+                renderHymns();
+                return;
+            }
+            const filtered = hymns.filter(h => 
+                h.title.toLowerCase().includes(term) || 
+                h.eng.toLowerCase().includes(term) ||
+                h.ref.toLowerCase().includes(term)
+            );
+            renderHymns(filtered);
+        }
+
+        // Initialize
+        window.onload = function() {
+            renderHymns();
+            
+            // Make modal closable by clicking outside
+            const modal = document.getElementById('hymnModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            
+            // Keyboard escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === "Escape") closeModal();
+            });
+            
+            console.log('%c✅ CLSU Lutheran Worship Digital App ready in VS Code!', 'color:#8B0000; font-size:1.1rem;');
+        };
+    </script>
+</body>
+</html>
